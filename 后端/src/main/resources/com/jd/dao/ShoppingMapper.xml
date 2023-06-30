@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jd.dao.ShoppingMapper">
+    <delete id="deleteShopping">
+        delete from shopping where user_id = #{userId} and goods_id in
+        <foreach collection="strIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="buyShopping">
+        insert into recycle(user_id, goods_id, goods_name, goods_price, goods_count)
+        values
+        <foreach collection="recycleShoppings" item="recycleShopping" separator=",">
+            (#{recycleShopping.userId},#{recycleShopping.goodsId},#{recycleShopping.goodsName},#{recycleShopping.goodsPrice},#{recycleShopping.goodsCount})
+        </foreach>
+    </insert>
+    <delete id="deleteBuyShopping">
+        delete
+        from shopping
+        where user_id = #{recycleShoppings[0].userId}
+        and goods_id in
+        <foreach collection="recycleShoppings" item="recycleShopping" separator="," open="(" close=")">
+            #{recycleShopping.goodsId}
+        </foreach>
+    </delete>
+</mapper>

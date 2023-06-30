@@ -1,0 +1,46 @@
+spring:
+  #配置数据库的连接信息-四要素
+  datasource:
+    #驱动类名称
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #数据库连接的url
+    url: jdbc:mysql://localhost:3306/jd_new
+    #连接数据库的用户名
+    username: root
+    #连接数据库的密码
+    password: 123456
+  #配置文件上传大小限制
+  servlet:
+    multipart:
+      #配置单个文件上传大小限制
+      max-file-size: 10MB
+      #配置单个请求最大大小的限制（一次请求中是可以上传多个文件）
+      max-request-size: 100MB
+  #邮箱验证码配置
+  mail:
+    #smtp服务主机  qq邮箱则为smtp.qq.com;163邮箱是smtp.163.com
+    host: smtp.qq.com
+    #服务协议
+    protocol: smtp
+    # 编码集
+    default-encoding: UTF-8
+    #发送邮件的账户
+    username: 1301808700@qq.com
+    #授权码
+    password: ogjqfrsaxgnejffc
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+mybatis:
+  configuration:
+    #配置mybatis的日志，指定输出到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #开启mybatis的驼峰命名自动映射开关a_column ==> aColumn
+    map-underscore-to-camel-case: true
+
