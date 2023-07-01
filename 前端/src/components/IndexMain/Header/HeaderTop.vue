@@ -65,7 +65,7 @@
 	} from 'element-plus'
 	import {
 		getUserInfo,
-		getShopping
+		searchShopping
 	} from "../../../api/axiosApi.js"
 	import {
 		userShoppingTotalStore
@@ -108,7 +108,7 @@
 					// token没过期，表示当前用户不用重新登录
 					userInfo.value = localStorage.getItem("username");
 					// 则访问后端获取购物车的数量显示到页面
-					getShopping(username).then(data => {
+					searchShopping().then(data => {
 						if (data.data.data !== null) {
 							// 把购物车上面的数字显示为当前用户的购物车数量
 							shoppingTotal.setShoppingTotal(data.data.data.length);

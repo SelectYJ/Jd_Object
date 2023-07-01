@@ -33,7 +33,8 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		reactive
 	} from 'vue'
 	import {
 		useRouter
@@ -45,7 +46,7 @@
 		register
 	} from '../../api/axiosApi.js'
 	// 注册包含的相关属性
-	const registerFormData = ref({
+	const registerFormData = reactive({
 		name: '',
 		username: '',
 		sex: '',
@@ -60,7 +61,7 @@
 	const register_confirm = () => {
 		registerForm.value.validate((valid) => {
 			if (valid) { //valid成功为true，失败为false
-				register(registerFormData.value).then(data => {
+				register(registerFormData).then(data => {
 					if (data.data.code === 1) {
 						ElMessage.success("注册成功")
 						router.push({
@@ -80,14 +81,14 @@
 	const validatePass2 = (rule, value, callback) => {
 		if (value === '') {
 			callback(new Error('请再次输入密码'))
-		} else if (value !== registerFormData.value.password) {
+		} else if (value !== registerFormData.password) {
 			callback(new Error('两次输入密码不一致!'))
 		} else {
 			callback()
 		}
 	}
 	// 定义表单校验规则
-	const rules = ref({
+	const rules = reactive({
 		name: [{
 				required: true,
 				message: '请输入用户姓名',

@@ -1,29 +1,46 @@
 package com.jd.dao;
 
 import com.jd.entity.RecycleShopping;
+import com.jd.entity.SearchShopping;
 import com.jd.entity.ShoppingInfo;
-import com.jd.entity.User;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
 public interface ShoppingMapper {
+
     /**
-     * 根据用户id查询shopping中商品id，再联合goods表查询购物车所有商品信息【用户的购物车信息】
+     * 查询所有的商品分类
+     * 不传参数则查询所有分类
+     * 当传入参数时根据分类id查询的商品分类名字
      *
-     * @param user 用于存放用户id
      * @return
      */
-    @Select("select s.user_id,s.goods_id,g.name goodsName,g.price goodsPrice,s.goods_count,s.create_time from goods g left join shopping s on g.id = s.goods_id where s.user_id = #{id}")
-    List<ShoppingInfo> getShoppingInfoByUserId(User user);
+    List<SearchShopping> searchFamily(String familyId);
+
+    /**
+     * 根据用户输入的条件查询购物车信息
+     * 当没有输入条件的时候查询该用户下的所有购物车信息
+     * 根据用户id查询shopping中商品id，再联合goods表查询购物车所有商品信息【用户的购物车信息】
+     *
+     * @param userId   用户id
+     * @param goodsName   商品名称
+     * @param family    商品类型
+     * @param startDateTimes 开始时间
+     * @param endDateTimes 结束时间
+     * @return
+     */
+    List<ShoppingInfo> searchShopping(Integer userId, String goodsName, Integer family,LocalDateTime startDateTimes,LocalDateTime endDateTimes);
 
     /**
      * 根据商品id和数量添加商品到购物车
      *
      * @param shoppingInfo
      */
-    @Insert("insert into shopping(user_id, goods_id, goods_count, create_time) value (#{userId},#{goodsId},#{goodsCount},#{createTime})")
+    @Insert("insert into shopping(user_id, goods_id , family , goods_count, create_time) " +
+            "value (#{userId},#{goodsId},#{family},#{goodsCount},#{createTime})")
     void addShoppingInCarByGoodsId(ShoppingInfo shoppingInfo);
 
     /**
@@ -68,5 +85,5 @@ public interface ShoppingMapper {
      * @param goodsId 商品id
      */
     @Delete("delete from recycle where user_id = #{userId} and goods_id = #{goodsId} and create_time = #{createTime}")
-    void deleteRecycleBuyShoppingByGoodsId(Integer userId, String goodsId,String createTime);
+    void deleteRecycleBuyShoppingByGoodsId(Integer userId, String goodsId, String createTime);
 }

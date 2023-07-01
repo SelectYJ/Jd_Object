@@ -55,15 +55,15 @@
 	import {
 		ref,
 		onMounted,
-		onBeforeUpdate,
-		watch
+		onBeforeUpdate
+		// watch
 	} from 'vue'
 	const disabled = ref(true);
 	const username = localStorage.getItem('username');
 	const titleUsername = ref('的购物车');
-	watch(disabled, () => {
-		titleUsername.value = !disabled.value ? '已结算的商品信息' : '的购物车';
-	})
+	// watch(disabled, () => {
+	// 	titleUsername.value = !disabled.value ? '已结算的商品信息' : '的购物车';
+	// })
 	const updateIndex = () => {
 		const href = location.href.split('/');
 		if (href[href.length - 1] !== 'BeforeShoppingCar') {

@@ -13,8 +13,7 @@ let token = localStorage.getItem("token");
 // 添加请求拦截器
 axios.interceptors.request.use(function(config) {
 	// console.log(config.url);
-	// 判断是不是以getEmail/sendEmail?tos=结尾并且判断有没有token
-	if (token&&config.url.indexOf('getEmail') === -1) {
+	if (token) {
 		config.headers.token = token;
 	}
 	return config;
@@ -83,7 +82,7 @@ const getUserInfo = (username) => {
 	})
 }
 // 获取用户的旧密码
-const getUserOldPasswordByUserId = (userId,userNewPassword) => {
+const getUserOldPasswordByUserId = (userId, userNewPassword) => {
 	return axios.post('getUserOldPasswordByUserId', {
 		"id": userId,
 		"password": userNewPassword
@@ -118,16 +117,23 @@ const getGoodsInfo = (id) => {
 	return axios.get('goods/' + id)
 }
 // 添加商品到购物车
-const addGoodsInShopping = (goodsId, count) => {
-	return axios.get('shopping/increaseGoods?goodsId=' + goodsId + '&goodsCount=' + count)
+const addGoodsInShopping = (goodsId, family, count) => {
+	return axios.get('shopping/increaseGoods?goodsId=' + goodsId + '&family=' + family + '&goodsCount=' + count)
 }
 
 /*===========================================用户的购物车相关==================================*/
-// 购物车页面
-const getShopping = (params) => {
-	return axios.post('shopping/show', {
-		"username": params
-	})
+// 查询所有的商品类型
+const searchFamily = () => {
+	return axios.get('shopping/searchFamily')
+}
+// 搜索满足条件的购物车商品，或者获取所有的购物车商品
+const searchShopping = (params) => {
+	if (params !== undefined) {
+		return axios.get('shopping/searchShopping?goodsName=' + params.goodsName + '&family=' + params.family +
+			'&startDate=' + (params.startDateTime) +
+			'&endDate=' + (params.endDateTime))
+	}
+	return axios.get('shopping/searchShopping')
 }
 // 修改商品数量
 const updateShoppingCount = (id, count) => {
@@ -139,8 +145,8 @@ const deleteShoppingByIds = (listId) => {
 }
 // 结算商品
 const buyShopping = (buyAll) => {
-	return axios.post('shopping/buyShopping',{
-		"buyShopping":buyAll
+	return axios.post('shopping/buyShopping', {
+		"buyShopping": buyAll
 	})
 }
 // 获取结算的商品信息展示
@@ -149,15 +155,15 @@ const getBuyShoppings = () => {
 }
 
 //
-const deleteRecycleBuyByGoodsId = (goodsId,createTime) => {
+const deleteRecycleBuyByGoodsId = (goodsId, createTime) => {
 	return axios.get('shopping/deleteRecycleShoppingByGoodsId?goodsId=' + goodsId + '&createTime=' + createTime)
 }
 
 
 export {
 	// 用户相关
-	login,// 登录
-	register,// 注册
+	login, // 登录
+	register, // 注册
 	sendCodeByEmail,
 	codeIsOk,
 	getUserInfo,
@@ -169,7 +175,8 @@ export {
 	getGoodsInfo,
 	addGoodsInShopping,
 	// 用户的购物车相关
-	getShopping,
+	searchFamily,
+	searchShopping,
 	updateShoppingCount,
 	deleteShoppingByIds,
 	buyShopping,

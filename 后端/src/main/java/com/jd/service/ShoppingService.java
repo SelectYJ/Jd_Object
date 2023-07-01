@@ -1,20 +1,29 @@
 package com.jd.service;
 
 import com.jd.entity.RecycleShopping;
+import com.jd.entity.SearchShopping;
 import com.jd.entity.ShoppingInfo;
-import com.jd.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ShoppingService {
 
     /**
-     * 获取用户购物车商品信息
-     *
-     * @param user 用于存放用户id
+     * 查询所有的商品类型并返回
      * @return
      */
-    List<ShoppingInfo> getShoppingInfoByUserId(User user);
+    List<SearchShopping> searchFamily();
+
+    /**
+     * 根据用户输入的条件查询购物车信息
+     * @param goodsName 商品名字
+     * @param familyId  商品类型
+     * @param startDateTimes 开始时间
+     * @param endDateTimes 结束时间
+     * @return
+     */
+    List<ShoppingInfo> searchShopping(Integer userId,String goodsName, Integer familyId, LocalDateTime startDateTimes,LocalDateTime endDateTimes);
 
     /**
      * 修改购物车商品数量
@@ -58,9 +67,10 @@ public interface ShoppingService {
     List<RecycleShopping> getBuyShopping(Integer username);
 
     /**
-     * 根据用户id和商品id来删除结算表中记录的商品
+     * 根据用户id和商品id，以及创建结算商品的时间来删除结算表中记录的商品
      * @param userId 用户id
      * @param goodsId 商品id
+     * @param createTime 结算商品的时间
      */
     void deleteRecycleBuyShoppingByGoodsId(Integer userId, String goodsId,String createTime);
 }

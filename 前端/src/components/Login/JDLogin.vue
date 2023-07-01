@@ -18,7 +18,8 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		reactive
 	} from 'vue'
 	import {
 		useRouter
@@ -27,7 +28,7 @@
 		login
 	} from '../../api/axiosApi.js'
 	// 登录相关属性
-	const loginFormData = ref({
+	const loginFormData = reactive({
 		name: '',
 		password: ''
 	});
@@ -40,11 +41,11 @@
 		loginForm.value.validate((valid) => {
 			if (valid) { //valid成功为true，失败为false
 				login({
-					"username": loginFormData.value.name,
-					"password": loginFormData.value.password,
+					"username": loginFormData.name,
+					"password": loginFormData.password,
 				}).then((data) => {
 					if (data.data.code === 1) {
-						localStorage.setItem('username', loginFormData.value.name)
+						localStorage.setItem('username', loginFormData.name)
 						router.push({
 							path: '/'
 						})
@@ -59,7 +60,7 @@
 		});
 	}
 	// 定义表单校验规则
-	const rules = ref({
+	const rules = reactive({
 		name: [{
 				required: true,
 				message: '请输入用户名',

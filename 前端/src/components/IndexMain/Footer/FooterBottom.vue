@@ -72,7 +72,7 @@
 		goodsShow,
 		getGoodsInfo,
 		addGoodsInShopping,
-		getShopping
+		searchShopping
 	} from '../../../api/axiosApi.js'
 	import {
 		userShoppingTotalStore
@@ -95,6 +95,7 @@
 	const shoppingInfo = ref([{
 		createTime: "2023-06-10T22:15:23",
 		id: 1,
+		family: 0,
 		img: "1.jpg",
 		information: "性能好",
 		goodsName: "华为",
@@ -132,11 +133,11 @@
 
 	// 添加进购物车
 	const addShopping = () => {
-		addGoodsInShopping(shoppingInfo.value.id, count.value).then(data => {
+		addGoodsInShopping(shoppingInfo.value.id, shoppingInfo.value.family , count.value).then(data => {
 			closeInfo();
 			if (data.data.code !== 0) {
-				const username = localStorage.getItem("username")
-				getShopping(username).then(data => {
+				// const username = localStorage.getItem("username")
+				searchShopping().then(data => {
 					shoppingTotal.setShoppingTotal(data.data.data.length);
 					ElMessage({
 						type: 'success',
@@ -235,11 +236,6 @@
 					loading.value = true
 					getData.value = "网络错误/服务器未启动！！";
 					get.value = true;
-					// setTimeout(() => {
-					// 	get.value = true;
-						// loading.value = false
-						// getData.value = "";
-					// }, 1000)
 				});
 			}
 		}

@@ -87,7 +87,6 @@
 					</span>
 				</template>
 			</el-dialog>
-
 			<p class="box">
 				<span class="roll">个人信息页面</span>
 			</p>
@@ -98,6 +97,7 @@
 <script setup>
 	import {
 		ref,
+		reactive,
 		onMounted
 	} from 'vue'
 	import {
@@ -122,7 +122,7 @@
 	const oldPassword = ref('')
 
 	// 用于存放个人信息
-	const userInfo = ref([{
+	const userInfo = reactive([{
 		id: 0,
 		name: '',
 		emailName: '',
@@ -137,20 +137,20 @@
 	const showInput = ref(false);
 	// 点击修改按钮
 	const showUpdate = () => {
-		userInfo.value[0].emailName = userInfo.value[0].emailName == '暂无填写' ? '' : userInfo.value[0].emailName;
+		userInfo[0].emailName = userInfo[0].emailName == '暂无填写' ? '' : userInfo[0].emailName;
 		showInput.value = !showInput.value
 	}
 	// 点击确认修改个人信息
 	const click_update = () => {
-		if (userInfo.value[0].password.trim() === '' || userInfo.value[0].name.trim() === '' || userInfo.value[0]
-			.username.trim() === '' || userInfo.value[0].emailName.trim() === '') {
+		if (userInfo[0].password.trim() === '' || userInfo[0].name.trim() === '' || userInfo[0]
+			.username.trim() === '' || userInfo[0].emailName.trim() === '') {
 			ElMessage.error('数据不能为空')
 		} else {
-			if (userInfo.value[0].age <= 0 || userInfo.value[0].age > 200) {
+			if (userInfo[0].age <= 0 || userInfo[0].age > 200) {
 				ElMessage.error('年龄应该在1~200岁')
 			} else {
 				var reg01 = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-				if (reg01.test(userInfo.value[0].emailName)) {
+				if (reg01.test(userInfo[0].emailName)) {
 					oldPasswordShow.value = true
 					setTimeout(() => {
 						refInput.value.focus();
@@ -164,7 +164,7 @@
 	// 发送验证码
 	const sendEmailCode = () => {
 		// 向用户邮箱发送验证码
-		sendCodeByEmail(userInfo.value[0].emailName).then(data => {
+		sendCodeByEmail(userInfo[0].emailName).then(data => {
 			if (data.data.code === 1) {
 				ElMessage.success(data.data.data)
 			}
@@ -173,10 +173,10 @@
 	// 判断 旧密码/验证码 来确认修改
 	const updateOK = () => {
 		// 判断刚开始显示的邮箱地址和现在提交的邮箱地址是否相同
-		if (oldEmailName.value === userInfo.value[0].emailName) {
+		if (oldEmailName.value === userInfo[0].emailName) {
 			// console.log("没变过邮箱地址");
 			// 判断旧密码是否正确
-			getUserOldPasswordByUserId(userInfo.value[0].id, oldPassword.value).then(data => {
+			getUserOldPasswordByUserId(userInfo[0].id, oldPassword.value).then(data => {
 				if (data.data.code === 1) {
 					updateUser();
 				}
@@ -194,13 +194,13 @@
 	}
 	// 修改个人信息
 	const updateUser =  () => {
-		userInfo.value[0].name = userInfo.value[0].name.trim();
-		userInfo.value[0].username = userInfo.value[0].username.trim();
-		userInfo.value[0].password = userInfo.value[0].password.trim();
+		userInfo[0].name = userInfo[0].name.trim();
+		userInfo[0].username = userInfo[0].username.trim();
+		userInfo[0].password = userInfo[0].password.trim();
 		showInput.value = !showInput.value;
-		updateUserInfo(userInfo.value[0]).then(data => {
+		updateUserInfo(userInfo[0]).then(data => {
 			if (data.data.code === 1) {
-				localStorage.setItem('username', userInfo.value[0].username);
+				localStorage.setItem('username', userInfo[0].username);
 				oldPasswordShow.value = false
 				getInfo();
 				ElMessage({
@@ -216,14 +216,14 @@
 		const username = localStorage.getItem('username');
 		getUserInfo(username).then(data => {
 			if (data.data.code !== 0) {
-				userInfo.value[0].id = data.data.data.id
-				userInfo.value[0].name = data.data.data.name
-				userInfo.value[0].emailName = data.data.data.emailName || "暂无填写"
+				userInfo[0].id = data.data.data.id
+				userInfo[0].name = data.data.data.name
+				userInfo[0].emailName = data.data.data.emailName || "暂无填写"
 				oldEmailName.value = data.data.data.emailName
-				userInfo.value[0].age = data.data.data.age
-				userInfo.value[0].gender = data.data.data.gender
-				userInfo.value[0].username = data.data.data.username
-				userInfo.value[0].password = data.data.data.password
+				userInfo[0].age = data.data.data.age
+				userInfo[0].gender = data.data.data.gender
+				userInfo[0].username = data.data.data.username
+				userInfo[0].password = data.data.data.password
 			} else {
 				location.href = '/LoginAndRegister'
 			}
@@ -239,7 +239,7 @@
 				cancelButtonText: '取消',
 				type: 'warning',
 			}).then(() => {
-			clearUser(userInfo.value[0].id).then(data => {
+			clearUser(userInfo[0].id).then(data => {
 				if (data.data.code === 1) {
 					localStorage.removeItem("username");
 					localStorage.removeItem("token");

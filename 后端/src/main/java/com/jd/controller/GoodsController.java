@@ -18,7 +18,14 @@ public class GoodsController {
     @Autowired
     private GoodsService goodService;
 
-    @GetMapping("show") // 根据分页展示所有商品
+    /**
+     * 根据分页展示所有商品
+     * @param page  第几页
+     * @param count 每页多少条
+     * @return
+     * @throws InterruptedException
+     */
+    @GetMapping("show")
     public Result goodsShow(Integer page, Integer count) throws InterruptedException {
         log.info("商品展示页面：第{}页，每页{}条......", page, count);
         TimeUnit.MILLISECONDS.sleep(500);
@@ -26,7 +33,12 @@ public class GoodsController {
         return Result.success(goodsInfo);
     }
 
-    @GetMapping("{id}") // 根据id展示一个商品
+    /**
+     * 根据id展示一个商品
+     * @param id 商品id
+     * @return
+     */
+    @GetMapping("{id}")
     public Result goodShowById(@PathVariable Integer id) {
         log.info("展示id为{}的商品信息......", id);
         Goods goodInfo = goodService.getGoodsInfoById(id);

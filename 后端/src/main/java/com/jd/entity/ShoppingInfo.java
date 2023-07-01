@@ -17,6 +17,7 @@ public class ShoppingInfo {
     private Integer id; // 当前数据id
     private Integer userId; // 用户id
     private Integer goodsId; // 商品id
+    private Integer family; // 商品类型
     private String goodsName; // 商品名称
     private Double goodsPrice; // 商品价格
     private Integer goodsCount; // 商品数量

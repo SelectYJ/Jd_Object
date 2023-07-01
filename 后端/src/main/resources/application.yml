@@ -1,3 +1,6 @@
+# 设置端口
+#server:
+#  port: 8081
 spring:
   #配置数据库的连接信息-四要素
   datasource:

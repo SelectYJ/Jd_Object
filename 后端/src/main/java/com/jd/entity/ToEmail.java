@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ToEmail implements Serializable {
     // 邮件接收方
-    private String[] tos;
+    private String tos;
     // 邮件主题
     private String subject;
     // 邮件内容

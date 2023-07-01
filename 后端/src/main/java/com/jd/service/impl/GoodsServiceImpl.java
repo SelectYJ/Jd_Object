@@ -19,13 +19,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getGoodsInfo(Integer page, Integer count) {
         Integer nowSum = (page - 1) * 5;
-        List<Goods> goodsInfo = goodsMapper.getGoodsInfo(nowSum, count);
-        return goodsInfo;
+        return goodsMapper.getGoodsInfo(nowSum, count);
     }
 
     @Override
     public Goods getGoodsInfoById(Integer id) {
-        Goods goodInfo = goodsMapper.getGoodInfoById(id);
-        return goodInfo;
+        return goodsMapper.getGoodInfoById(id);
     }
 }

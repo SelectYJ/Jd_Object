@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("getEmail")
 public class EmailController {
@@ -50,12 +52,12 @@ public class EmailController {
             message.setTo(toEmail.getTos());
             message.setSubject("您本次的验证码是");
             emailCode = CreateCodeUtil.getCode(6);
-            message.setText("尊敬的" + toEmail.getTos().toString() + ",您好:\n"
+            message.setText("尊敬的" + toEmail.getTos() + ",您好:\n"
                     + "\n本次请求的邮件验证码为:" + emailCode + ",本验证码 5 分钟内效，请及时输入。（请勿泄露此验证码）\n"
                     + "\n如非本人操作，请忽略该邮件。\n(这是一封通过自动发送的邮件，请不要直接回复）");
             mailSender.send(message);
             sendTime = System.currentTimeMillis();
-            log.info("向{}发送验证码成功，验证码为：{}，发送时间为：{}", toEmail.getTos().toString(), emailCode, sendTime);
+            log.info("向{}发送验证码成功，验证码为：{}，发送时间为：{}", toEmail.getTos(), emailCode, sendTime);
             return Result.success("发送成功");
         }
         return Result.success("已经发送过了，快去邮箱查看吧！！");

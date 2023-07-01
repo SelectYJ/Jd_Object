@@ -23,7 +23,8 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		reactive
 	} from 'vue'
 	import {
 		useRouter
@@ -41,12 +42,12 @@
 	// 用于判断输入是否满足所有要求
 	const registerByEmailForm = ref();
 	// 注册包含的相关属性
-	const registerFormData = ref({
+	const registerFormData = reactive({
 		emailPath: '',
 		emailCode: ''
 	});
 	// 定义表单校验规则
-	const rules = ref({
+	const rules = reactive({
 		emailPath: [{
 				required: true,
 				message: '请输入邮箱地址！！',
@@ -64,7 +65,7 @@
 		registerByEmailForm.value.validate((valid) => {
 			if (valid) { //valid成功为true，失败为false
 				// 向用户邮箱发送验证码
-				sendCodeByEmail(registerFormData.value.emailPath).then(data => {
+				sendCodeByEmail(registerFormData.emailPath).then(data => {
 					if (data.data.code === 1) {
 						ElMessage.success(data.data.data)
 					}
@@ -79,12 +80,12 @@
 	const register_email = () => {
 		registerByEmailForm.value.validate((valid) => {
 			if (valid) { //valid成功为true，失败为false
-				if (registerFormData.value.emailCode !== '') {
+				if (registerFormData.emailCode !== '') {
 					// 向后端发送用户输入的验证码判断是否正确
-					codeIsOk(registerFormData.value.emailCode).then(data => {
+					codeIsOk(registerFormData.emailCode).then(data => {
 						if (data.data.code === 1) {
 							// 正确则注册用户信息
-							register(registerFormData.value).then(data => {
+							register(registerFormData).then(data => {
 								if (data.data.code === 1) {
 									ElMessage.success("注册成功")
 									router.push({

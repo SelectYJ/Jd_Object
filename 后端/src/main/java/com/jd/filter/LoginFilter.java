@@ -19,12 +19,12 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse rsp = (HttpServletResponse) servletResponse;
+
         if ("OPTIONS".equals(req.getMethod())) {
             log.info("OPTIONS请求，直接放行......");
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        rsp.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
         rsp.setHeader("Access-Control-Allow-Origin", "*");
         rsp.setHeader("Content-type", "text/html;charset=utf-8");
         // 1.获取请求url

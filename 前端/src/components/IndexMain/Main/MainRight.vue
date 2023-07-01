@@ -74,10 +74,11 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		reactive
 	} from 'vue'
 	// 小图标，移入变颜色
-	const imgDatas = ref([{
+	const imgDatas = reactive([{
 			img1: `src/assets/img/small_Icon_img/iconSmall_1.png`,
 			img2: `src/assets/img/small_Icon_img/iconSmall_2.png`,
 			text: "加油卡"
